@@ -1,4 +1,4 @@
-const form = document.getElementById("[data-novoItem]"); //captura o form
+const form = document.querySelector("[data-novoItem]"); //captura o form
 const lista = document.querySelector("[data-lista]"); //captura a 'ul' para podermos passar o novo 'li'
 
 form.addEventListener("submit", (event)=>{
@@ -8,6 +8,10 @@ form.addEventListener("submit", (event)=>{
     const quantidade = event.target.elements["quantidade"].value //captura a quantidade de objetos a serem postos na mochila
 
     criaElemento(nome, quantidade)
+
+    //limpando o campo nome e quantidade apos chamada de funcao criaElemento
+    event.target.elements["nome"].value = ""; 
+    event.target.elements["quantidade"].value = "";
 })
 
 function criaElemento(nome, quantidade) {
