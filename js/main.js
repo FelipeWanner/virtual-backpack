@@ -1,21 +1,21 @@
 const form = document.querySelector("[data-novoItem]"); //captura o form
 const lista = document.querySelector("[data-lista]"); //captura a 'ul' para podermos passar o novo 'li'
+const items = [];
 
 form.addEventListener("submit", (event)=>{
     event.preventDefault()
 
-    const nome = event.target.elements["nome"].value //captura o nome do objeto a ser posto na mochila
-    const quantidade = event.target.elements["quantidade"].value //captura a quantidade de objetos a serem postos na mochila
+    const nome = event.target.elements["nome"] //captura o nome do objeto a ser posto na mochila
+    const quantidade = event.target.elements["quantidade"] //captura a quantidade de objetos a serem postos na mochila
 
-    criaElemento(nome, quantidade)
+    criaElemento(nome.value, quantidade.value)
 
     //limpando o campo nome e quantidade apos chamada de funcao criaElemento
-    event.target.elements["nome"].value = ""; 
-    event.target.elements["quantidade"].value = "";
+    nome.value = ""; 
+    quantidade.value = "";
 })
 
 function criaElemento(nome, quantidade) {
-    console.log(nome, quantidade)
 
     //<li class="item"><strong>7</strong>Camisas</li>
     const novoItem = document.createElement('li'); //criando mais uma linha na lista de objetos
@@ -29,5 +29,15 @@ function criaElemento(nome, quantidade) {
 
     lista.appendChild(novoItem);
 
-    console.log(novoItem)
+    // criando objeto para passar para o localStorage
+    const itemAtual = {
+        "nome": nome,
+        "quantidade": quantidade,
+    }
+
+    items.push(itemAtual)
+
+    //agora passando o itemAtual como string para o localStorage armazenar
+    //IMPORTANTE: o localStorage so e capaz de ler strings, por isso ao passar algo para, deve se utilizar o stringfy
+    localStorage.setItem("item", JSON.stringify(items))
 }
