@@ -16,15 +16,29 @@ form.addEventListener("submit", (event)=>{
     const nome = event.target.elements["nome"] //captura o nome do objeto a ser posto na mochila
     const quantidade = event.target.elements["quantidade"] //captura a quantidade de objetos a serem postos na mochila
 
+    //const existe verifica se o elemento (item colocado na mochila) ja existe no array itens. se existir ele retorna o
+    //nome do elemento, se nao existir, retorn undefined
+    const existe = itens.find(elemento => elemento.nome === nome.value); 
+
     // criando objeto para passar para o localStorage
     const itemAtual = {
         "nome": nome.value,
         "quantidade": quantidade.value,
     }
-    
-    criaElemento(itemAtual)
 
-    itens.push(itemAtual)
+    if (existe) {
+        //se o item existe, passamos o id para ele de novo e chamamos a funcao atualizaElemento
+        itemAtual.id = existe.id
+
+        atualizaElemento(itemAtual);
+    } else{
+        //se o item nao existir, criamos o item e passamos o id igual ao tamanho do array itens.
+        itemAtual.id = itens.length
+
+        criaElemento(itemAtual)
+
+        itens.push(itemAtual)
+    }
 
     //agora passando o itemAtual como string para o localStorage armazenar
     //IMPORTANTE: o localStorage so e capaz de ler strings, por isso ao passar algo para, deve se utilizar o stringfy
@@ -43,9 +57,15 @@ function criaElemento(item) {
 
     const numeroItem = document.createElement("strong"); //criando a tag strong com o numero de objetos a serem colocados na mochila
     numeroItem.innerHTML = item.quantidade; //passando a quantidade recebida na funcao para dentro do HTML dentro da recem criada tag strong
-
+    numeroItem.dataset.id = item.id; //criando dataAttribute "id" passando o id do item
     novoItem.appendChild(numeroItem); //a tag li recebendo a tag strong ja com a sua quantidade adicionada
     novoItem.innerHTML += item.nome; //passando o nome recebido na funcao para dentro do HTML dentro da recem criada tag li
 
     lista.appendChild(novoItem);
+}
+
+function atualizaElemento(item){
+    //a funcao busca no documento a dataAttribute "data-id" no id especifico do item, e atualiza o item
+    //com a nova quantidade recebida atraves do innerHTML
+    document.querySelector(`[data-id="${item.id}"]`).innerHTML = item.quantidade
 }
