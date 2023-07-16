@@ -31,6 +31,8 @@ form.addEventListener("submit", (event)=>{
         itemAtual.id = existe.id
 
         atualizaElemento(itemAtual);
+
+        itens[existe.id] = itemAtual;
     } else{
         //se o item nao existir, criamos o item e passamos o id igual ao tamanho do array itens.
         itemAtual.id = itens.length
